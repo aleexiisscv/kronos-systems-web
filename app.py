@@ -1,13 +1,6 @@
 import streamlit as st
 from PIL import Image
 
-# --- CONFIGURACIÓN DE ESTADO ---
-if 'page' not in st.session_state:
-    st.session_state.page = "Inicio"
-
-def navigate_to(page_name):
-    st.session_state.page = page_name
-
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="KRONOS SYSTEMS | Future Tech",
@@ -16,7 +9,29 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- ESTILOS CSS AVANZADOS (SOLUCIÓN DE CONTRASTE) ---
+# --- GESTIÓN DE NAVEGACIÓN Y URL (FUNCIONALIDAD "BOTÓN ATRÁS") ---
+# 1. Función callback para cuando se usa la barra lateral
+def update_url_from_sidebar():
+    st.query_params["view"] = st.session_state.page
+
+# 2. Función para navegar desde botones internos
+def navigate_to(page_name):
+    st.session_state.page = page_name
+    st.query_params["view"] = page_name
+
+# 3. Lógica de Inicialización y Sincronización
+if 'page' not in st.session_state:
+    # Al cargar por primera vez, miramos la URL
+    # Si la URL es ".../?view=Modelo+A", cargamos esa página
+    st.session_state.page = st.query_params.get("view", "Inicio")
+else:
+    # Si la URL cambia (por el botón atrás del navegador), actualizamos el estado
+    # Esto permite que el botón "Atrás" del navegador funcione dentro de la app
+    query_view = st.query_params.get("view", "Inicio")
+    if st.session_state.page != query_view:
+        st.session_state.page = query_view
+
+# --- ESTILOS CSS AVANZADOS ---
 st.markdown("""
     <style>
     /* Importar fuente moderna (Google Fonts) */
@@ -80,6 +95,7 @@ st.markdown("""
     }
     /* Botón Titan */
     button[key="btn_a"] { background-color: #0A192F; color: white; }
+    button[key="btn_a_home"] { background-color: #0A192F; color: white; }
     
     /* CENTRADO DE IMÁGENES */
     .img-container {
@@ -98,9 +114,15 @@ with st.sidebar:
         st.title("KRONOS")
         
     st.markdown("---")
-    st.radio("Navegación:", ["Inicio", "Modelo A (Titan)", "Modelo B (Spark)", "Contacto"], key="page")
+    # MENÚ DE NAVEGACIÓN CONECTADO AL HISTORIAL
+    st.radio(
+        "Navegación:", 
+        ["Inicio", "Modelo A (Titan)", "Modelo B (Spark)", "Contacto"], 
+        key="page",
+        on_change=update_url_from_sidebar # IMPORTANTE: Actualiza la URL al hacer clic
+    )
     st.markdown("---")
-    st.info("🎓 Proyecto Académico\nMarketing & Dirección de Empresas")
+    st.info("🎓 Marketing: Estrategias")
 
 # ==========================================
 # PÁGINA DE INICIO (REDDISEÑADA)
@@ -108,14 +130,12 @@ with st.sidebar:
 if st.session_state.page == "Inicio":
     
     # 1. HEADER CON LOGO Y TAGLINE
-    # CAMBIO: Usamos [3, 2, 3] para centrar visualmente. 
-    # La columna central (2) es más estrecha, obligando al contenido a quedarse en el medio.
+    # Usamos [3, 2, 3] para centrar visualmente el logo
     col_spacer1, col_logo, col_spacer2 = st.columns([3, 2, 3])
     
     with col_logo:
         # Logo principal centrado
         try:
-            # Usamos 'use_container_width=True' para que llene la columna central (que ya está centrada)
             st.image("logo.jpeg", use_container_width=True) 
         except:
             st.markdown("<h1 style='text-align: center; color: #0A192F;'>KRONOS SYSTEMS</h1>", unsafe_allow_html=True)
@@ -123,11 +143,10 @@ if st.session_state.page == "Inicio":
     st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2.5rem;">"Tu ambición, nuestro motor."</p>', unsafe_allow_html=True)
 
     # 2. VIDEO HERO (Cinemático)
-    # Video centrado y con ancho fijo (no ocupa todo el ancho)
     try:
         col_l, col_vid, col_r = st.columns([1, 2, 1])
         with col_vid:
-            st.video("video_promo.mp4", width=640)  # ajustar ancho en píxeles según necesidad
+            st.video("video_promo.mp4")  # Video centrado
     except Exception:
         st.warning("⚠️ Archivo 'video_promo.mp4' no encontrado. Súbelo al repositorio.")
 
@@ -150,7 +169,6 @@ if st.session_state.page == "Inicio":
         st.button("EXPLORAR TITAN ➜", on_click=navigate_to, args=("Modelo A (Titan)",), key="btn_a_home")
 
     with col_img:
-        # Imagen central vertical (Opcional, si queda muy cargado se puede quitar)
         try:
             st.image("cartel.jpeg", caption="Campaña Visual Key", use_container_width=True)
         except:
@@ -180,11 +198,13 @@ if st.session_state.page == "Inicio":
 # PÁGINA MODELO A (TITAN)
 # ==========================================
 elif st.session_state.page == "Modelo A (Titan)":
+    # Títulos en Blanco, Negrita y Cursiva como solicitado
     st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"KRONOS TITAN"</p>', unsafe_allow_html=True)
     st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem; font-weight: bold; font-style: italic;">Potencia que define tu mundo</p>', unsafe_allow_html=True)
+    
     # Banner Heroico para el producto
     try:
-        st.image("image_pro.png", width=None, use_container_width=True) # Reusamos el cartel o una imagen especifica
+        st.image("image_pro.png", width=None, use_container_width=True) 
     except:
         pass
 
@@ -208,8 +228,7 @@ elif st.session_state.page == "Modelo A (Titan)":
         El **Modelo A** responde a la necesidad de *fiabilidad absoluta*. 
         En un mercado saturado, Titan se diferencia no por precio, sino por **capacidad de cómputo**.
         
-        > *"Es una inversión con la que buscan obtener una ventaja competitiva."* 
-        """)
+        > *"Es una inversión con la que buscan obtener una ventaja competitiva."* """)
         st.progress(95, text="Potencia de Rendimiento")
         st.progress(90, text="Fiabilidad")
         st.progress(60, text="Portabilidad")
@@ -218,14 +237,14 @@ elif st.session_state.page == "Modelo A (Titan)":
 # PÁGINA MODELO B (SPARK)
 # ==========================================
 elif st.session_state.page == "Modelo B (Spark)":
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"KRONOS TITAN"</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"KRONOS SPARK"</p>', unsafe_allow_html=True)
     st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem; font-weight: bold; font-style: italic;">Tu día a día, elevado</p>', unsafe_allow_html=True)
     
-        # Banner Heroico para el producto
     try:
-        st.image("image_lite.png", width=None, use_container_width=True) # Reusamos el cartel o una imagen especifica
+        st.image("image_lite.png", width=None, use_container_width=True) 
     except:
         pass
+        
     c1, c2 = st.columns([1, 1])
     with c1:
         st.write("### ¿Por qué Spark?")
@@ -261,7 +280,10 @@ elif st.session_state.page == "Contacto":
     with c_izq:
         st.header("Conecta con KRONOS")
         st.write("Ayúdanos a alcanzar nuestra meta de **5,400 leads anuales**.")
-        st.image("logo.jpeg", width=500)
+        try:
+            st.image("logo.jpeg", width=300)
+        except:
+            pass
     
     with c_der:
         with st.form("lead_form"):
