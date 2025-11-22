@@ -108,11 +108,15 @@ with st.sidebar:
 if st.session_state.page == "Inicio":
     
     # 1. HEADER CON LOGO Y TAGLINE
-    col_spacer1, col_logo, col_spacer2 = st.columns([1, 2, 1])
+    # CAMBIO: Usamos [3, 2, 3] para centrar visualmente. 
+    # La columna central (2) es más estrecha, obligando al contenido a quedarse en el medio.
+    col_spacer1, col_logo, col_spacer2 = st.columns([3, 2, 3])
+    
     with col_logo:
-        # Logo principal centrado con tamaño reducido
+        # Logo principal centrado
         try:
-            st.image("logo.jpeg", width=220)  # ajustar ancho en píxeles para hacerlo más pequeño
+            # Usamos 'use_container_width=True' para que llene la columna central (que ya está centrada)
+            st.image("logo.jpeg", use_container_width=True) 
         except:
             st.markdown("<h1 style='text-align: center; color: #0A192F;'>KRONOS SYSTEMS</h1>", unsafe_allow_html=True)
     st.markdown('<p class="tagline">"Tu ambición, nuestro motor." [cite: 123]</p>', unsafe_allow_html=True)
