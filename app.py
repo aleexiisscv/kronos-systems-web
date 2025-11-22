@@ -119,7 +119,7 @@ if st.session_state.page == "Inicio":
             st.image("logo.jpeg", use_container_width=True) 
         except:
             st.markdown("<h1 style='text-align: center; color: #0A192F;'>KRONOS SYSTEMS</h1>", unsafe_allow_html=True)
-    st.markdown('<p class="tagline">"Tu ambición, nuestro motor." [cite: 123]</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline">"Tu ambición, nuestro motor." </p>', unsafe_allow_html=True)
 
     # 2. VIDEO HERO (Cinemático)
     # Video centrado y con ancho fijo (no ocupa todo el ancho)
@@ -151,7 +151,7 @@ if st.session_state.page == "Inicio":
     with col_img:
         # Imagen central vertical (Opcional, si queda muy cargado se puede quitar)
         try:
-            st.image("cartel.jpeg", caption="Campaña Visual Key [cite: 126]", use_container_width=True)
+            st.image("cartel.jpeg", caption="Campaña Visual Key", use_container_width=True)
         except:
             st.write("Visual Key")
 
@@ -179,7 +179,7 @@ if st.session_state.page == "Inicio":
 # PÁGINA MODELO A (TITAN)
 # ==========================================
 elif st.session_state.page == "Modelo A (Titan)":
-    st.markdown("# KRONOS TITAN [cite: 132]")
+    st.markdown("# KRONOS TITAN ")
     st.markdown("### *Potencia que define tu mundo*")
     
     # Banner Heroico para el producto
@@ -205,10 +205,10 @@ elif st.session_state.page == "Modelo A (Titan)":
     with c2:
         st.write("### ¿Por qué Titan?")
         st.write("""
-        El **Modelo A** responde a la necesidad de *fiabilidad absoluta*[cite: 63]. 
+        El **Modelo A** responde a la necesidad de *fiabilidad absoluta*. 
         En un mercado saturado, Titan se diferencia no por precio, sino por **capacidad de cómputo**.
         
-        > *"Es una inversión con la que buscan obtener una ventaja competitiva."* [cite: 61]
+        > *"Es una inversión con la que buscan obtener una ventaja competitiva."* 
         """)
         st.progress(95, text="Potencia de Rendimiento")
         st.progress(90, text="Fiabilidad")
@@ -218,7 +218,7 @@ elif st.session_state.page == "Modelo A (Titan)":
 # PÁGINA MODELO B (SPARK)
 # ==========================================
 elif st.session_state.page == "Modelo B (Spark)":
-    st.markdown("# KRONOS SPARK [cite: 137]")
+    st.markdown("# KRONOS SPARK ")
     st.markdown("### *Tu día a día, elevado*")
         # Banner Heroico para el producto
     try:
@@ -229,7 +229,7 @@ elif st.session_state.page == "Modelo B (Spark)":
     with c1:
         st.write("### ¿Por qué Spark?")
         st.write("""
-        El **Modelo B** ataca el segmento masivo (estudiantes y familias) que busca **calidad-precio** sin sacrificar estilo[cite: 70].
+        El **Modelo B** ataca el segmento masivo (estudiantes y familias) que busca **calidad-precio** sin sacrificar estilo.
         
         * Diseño ligero para movilidad.
         * Batería optimizada.
@@ -259,8 +259,8 @@ elif st.session_state.page == "Contacto":
     c_izq, c_der = st.columns(2)
     with c_izq:
         st.header("Conecta con KRONOS")
-        st.write("Ayúdanos a alcanzar nuestra meta de **5,400 leads anuales**[cite: 54].")
-        st.image("logo.jpeg", width=200)
+        st.write("Ayúdanos a alcanzar nuestra meta de **5,400 leads anuales**.")
+        st.image("logo.jpeg", width=500)
     
     with c_der:
         with st.form("lead_form"):
