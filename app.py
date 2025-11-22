@@ -180,9 +180,8 @@ if st.session_state.page == "Inicio":
 # PÁGINA MODELO A (TITAN)
 # ==========================================
 elif st.session_state.page == "Modelo A (Titan)":
-    st.markdown("# KRONOS TITAN ")
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 3rem;">"KRONOS TITAN"</p>', unsafe_allow_html=True)
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"*Potencia que define tu mundo*"</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"*KRONOS TITAN*"</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"### *Potencia que define tu mundo*"</p>', unsafe_allow_html=True)
     
     # Banner Heroico para el producto
     try:
@@ -220,8 +219,9 @@ elif st.session_state.page == "Modelo A (Titan)":
 # PÁGINA MODELO B (SPARK)
 # ==========================================
 elif st.session_state.page == "Modelo B (Spark)":
-    st.markdown("# KRONOS SPARK ")
-    st.markdown("### *Tu día a día, elevado*")
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"*KRONOS TITAN*"</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"### *Tu día a día, elevado*"</p>', unsafe_allow_html=True)
+    
         # Banner Heroico para el producto
     try:
         st.image("image_lite.png", width=None, use_container_width=True) # Reusamos el cartel o una imagen especifica
