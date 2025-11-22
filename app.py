@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 
-# --- CONFIGURACIÓN DE LA PÁGINA ---
+# --- 1. CONFIGURACIÓN DE LA PÁGINA (Debe ser lo primero) ---
 st.set_page_config(
     page_title="KRONOS SYSTEMS | Future Tech",
     page_icon="⚡",
@@ -9,289 +9,271 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- GESTIÓN DE NAVEGACIÓN Y URL (FUNCIONALIDAD "BOTÓN ATRÁS") ---
-# 1. Función callback para cuando se usa la barra lateral
-def update_url_from_sidebar():
-    st.query_params["view"] = st.session_state.page
+# --- 2. CONSTANTES Y CONFIGURACIÓN ---
+VALID_PAGES = ["Inicio", "Modelo A (Titan)", "Modelo B (Spark)", "Contacto"]
 
-# 2. Función para navegar desde botones internos
+# --- 3. GESTIÓN DE ESTADO Y NAVEGACIÓN (Lógica del botón Atrás) ---
+# Inicializar estado si no existe
+if 'page' not in st.session_state:
+    st.session_state.page = "Inicio"
+
+# Leer la URL actual
+query_params = st.query_params
+url_view = query_params.get("view", "Inicio")
+
+# Validar que la vista de la URL sea válida
+if url_view not in VALID_PAGES:
+    url_view = "Inicio"
+
+# CORE LOGIC: Si la URL es diferente al estado interno, actualizamos y recargamos.
+# Esto es lo que hace que el botón "Atrás" del navegador funcione.
+if st.session_state.page != url_view:
+    st.session_state.page = url_view
+    st.rerun()
+
+# Función para actualizar la URL cuando se hace clic en botones
 def navigate_to(page_name):
     st.session_state.page = page_name
     st.query_params["view"] = page_name
 
-# 3. Lógica de Inicialización y Sincronización
-if 'page' not in st.session_state:
-    # Al cargar por primera vez, miramos la URL
-    # Si la URL es ".../?view=Modelo+A", cargamos esa página
-    st.session_state.page = st.query_params.get("view", "Inicio")
-else:
-    # Si la URL cambia (por el botón atrás del navegador), actualizamos el estado
-    # Esto permite que el botón "Atrás" del navegador funcione dentro de la app
-    query_view = st.query_params.get("view", "Inicio")
-    if st.session_state.page != query_view:
-        st.session_state.page = query_view
+# Función callback para la barra lateral
+def update_url_from_sidebar():
+    st.query_params["view"] = st.session_state.page
 
-# --- ESTILOS CSS AVANZADOS ---
+# --- 4. ESTILOS CSS AVANZADOS ---
 st.markdown("""
     <style>
-    /* Importar fuente moderna (Google Fonts) */
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap');
+    /* Importar fuente moderna */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Montserrat', sans-serif;
     }
 
-    /* TÍTULOS */
-    h1, h2, h3 {
-        font-weight: 700 !important;
-    }
+    /* Estilos Generales */
+    h1, h2, h3 { font-weight: 700 !important; }
     
-    /* ESTILO DEL HEADER PRINCIPAL */
-    .tagline {
-        font-size: 1.5rem; 
-        color: #555; 
+    /* Taglines */
+    .tagline-main {
+        font-size: 2.5rem; 
+        color: #FFFFFF; 
         text-align: center; 
-        font-weight: 300; 
-        margin-top: -10px;
+        font-weight: bold; 
+        font-style: italic;
+        margin-top: -10px; 
         margin-bottom: 20px;
+        text-shadow: 0px 0px 10px rgba(0,0,0,0.5);
     }
 
-    /* TARJETAS DE PRODUCTO MEJORADAS */
-    /* Tarjeta TITAN (Oscura) */
+    /* TARJETAS - MUNDO TITAN (PRO) */
     .pro-card {
-        background: linear-gradient(135deg, #0A192F 0%, #1C2E4A 100%);
+        background: linear-gradient(135deg, #0A192F 0%, #162447 100%);
         color: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        transition: transform 0.3s ease;
-        border: 1px solid #333;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(10, 25, 47, 0.3);
+        border: 1px solid #1F4068;
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify_content: center;
     }
-    .pro-card h2 { color: #F0F0F0 !important; border-bottom: 2px solid #00BFFF; padding-bottom: 10px;}
-    .pro-card p { color: #B0C4DE !important; font-size: 1rem;}
+    .pro-card h2 { color: #E0E0E0 !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .pro-card p { color: #B0C4DE !important; font-size: 1rem; line-height: 1.5; }
 
-    /* Tarjeta SPARK (Clara) */
+    /* TARJETAS - MUNDO SPARK (LITE) */
     .lite-card {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5E6 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF3E0 100%);
         color: #333;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        border: 1px solid #FF8C00;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(255, 140, 0, 0.15);
+        border: 1px solid #FFCC80;
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify_content: center;
     }
-    .lite-card h2 { color: #FF4500 !important; border-bottom: 2px solid #FF8C00; padding-bottom: 10px;}
-    .lite-card p { color: #555 !important; font-size: 1rem;}
+    .lite-card h2 { color: #E65100 !important; font-size: 1.8rem; margin-bottom: 10px; }
+    .lite-card p { color: #5D4037 !important; font-size: 1rem; line-height: 1.5; }
 
-    /* BOTONES PERSONALIZADOS */
+    /* BOTONES */
     div.stButton > button {
         width: 100%;
         border-radius: 8px;
-        height: 3em;
-        font-weight: bold;
+        height: 3.5em;
+        font-weight: 700;
         border: none;
-        transition: 0.3s;
+        transition: all 0.3s ease;
     }
-    /* Botón Titan */
-    button[key="btn_a"] { background-color: #0A192F; color: white; }
-    button[key="btn_a_home"] { background-color: #0A192F; color: white; }
-    
-    /* CENTRADO DE IMÁGENES */
-    .img-container {
-        display: flex;
-        justify_content: center;
-    }
+    button[key="btn_a_home"], button[key="btn_a"] { background-color: #0A192F; color: white; }
+    button[key="btn_b_home"] { background-color: #FF8C00; color: white; }
+
     </style>
 """, unsafe_allow_html=True)
 
-# --- BARRA LATERAL ---
+# --- 5. BARRA LATERAL ---
 with st.sidebar:
-    # Intentamos cargar el logo, si falla no rompe la app
     try:
         st.image("logo.jpeg", use_container_width=True)
     except:
         st.title("KRONOS")
-        
+    
     st.markdown("---")
-    # MENÚ DE NAVEGACIÓN CONECTADO AL HISTORIAL
     st.radio(
         "Navegación:", 
-        ["Inicio", "Modelo A (Titan)", "Modelo B (Spark)", "Contacto"], 
+        VALID_PAGES, 
         key="page",
-        on_change=update_url_from_sidebar # IMPORTANTE: Actualiza la URL al hacer clic
+        on_change=update_url_from_sidebar # Importante para el historial
     )
     st.markdown("---")
-    st.info("🎓 Marketing: Estrategias")
+    st.info("🎓 Estrategia: Segmentación Dual")
 
-# ==========================================
-# PÁGINA DE INICIO (REDDISEÑADA)
-# ==========================================
+# --- 6. PÁGINA DE INICIO ---
 if st.session_state.page == "Inicio":
     
-    # 1. HEADER CON LOGO Y TAGLINE
-    # Usamos [3, 2, 3] para centrar visualmente el logo
+    # Header con Logo Centrado (Usando columnas 3-2-3)
     col_spacer1, col_logo, col_spacer2 = st.columns([3, 2, 3])
-    
     with col_logo:
-        # Logo principal centrado
         try:
             st.image("logo.jpeg", use_container_width=True) 
         except:
             st.markdown("<h1 style='text-align: center; color: #0A192F;'>KRONOS SYSTEMS</h1>", unsafe_allow_html=True)
 
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2.5rem;">"Tu ambición, nuestro motor."</p>', unsafe_allow_html=True)
+    # Tagline Principal (Blanco, Negrita, Cursiva) - Asegúrate que el fondo contraste o usa sombra
+    st.markdown('<p class="tagline-main" style="color: #333;">"Tu ambición, nuestro motor."</p>', unsafe_allow_html=True)
 
-    # 2. VIDEO HERO (Cinemático)
+    # Video Promocional
     try:
-        col_l, col_vid, col_r = st.columns([1, 2, 1])
-        with col_vid:
-            st.video("video_promo.mp4")  # Video centrado
-    except Exception:
-        st.warning("⚠️ Archivo 'video_promo.mp4' no encontrado. Súbelo al repositorio.")
+        c_video = st.container()
+        with c_video:
+            col_l, col_v, col_r = st.columns([1, 3, 1])
+            with col_v:
+                st.video("video_promo.mp4")
+    except:
+        st.warning("⚠️ Sube el video 'video_promo.mp4' al repositorio.")
 
-    st.markdown("###") # Espaciador
+    st.write("###") 
 
-    # 3. SECCIÓN DE ELECCIÓN (DOBLE REALIDAD)
-    st.markdown("<h2 style='text-align: center; margin-bottom: 30px;'>ELIGE TU REALIDAD</h2>", unsafe_allow_html=True)
+    # Sección de Elección
+    st.markdown("<h2 style='text-align: center; font-size: 1.8rem; margin-bottom: 40px; color: #333;'>ELIGE TU REALIDAD</h2>", unsafe_allow_html=True)
     
-    col_titan, col_img, col_spark = st.columns([1, 0.8, 1], gap="large")
+    col_titan, col_img, col_spark = st.columns([1, 0.05, 1], gap="small")
 
     with col_titan:
         st.markdown("""
         <div class="pro-card">
             <h2>MUNDO TITAN</h2>
             <p><b>PROFESIONAL / IA</b></p>
-            <p>"Diseñado para lo imposible". Rendimiento extremo para arquitectura, ingeniería y modelado 3D.</p>
-            <br>
+            <p>Rendimiento extremo para quienes diseñan el futuro.</p>
         </div>
         """, unsafe_allow_html=True)
+        st.write("")
         st.button("EXPLORAR TITAN ➜", on_click=navigate_to, args=("Modelo A (Titan)",), key="btn_a_home")
-
-    with col_img:
-        try:
-            st.image("cartel.jpeg", caption="Campaña Visual Key", use_container_width=True)
-        except:
-            st.write("Visual Key")
 
     with col_spark:
         st.markdown("""
         <div class="lite-card">
             <h2>MUNDO SPARK</h2>
             <p><b>LITE / VERSÁTIL</b></p>
-            <p>"Todo lo que necesitas". Agilidad, diseño fresco y potencia optimizada para tu día a día.</p>
-            <br>
+            <p>Todo lo que necesitas. Agilidad y diseño para tu día a día.</p>
         </div>
         """, unsafe_allow_html=True)
+        st.write("")
         st.button("EXPLORAR SPARK ➜", on_click=navigate_to, args=("Modelo B (Spark)",), key="btn_b_home")
-
+    
     st.divider()
     
-    # 4. KPIs / OBJETIVOS (Toque Académico)
-    kpi1, kpi2, kpi3 = st.columns(3)
-    kpi1.metric(label="Objetivo Leads/Mes", value="450+", delta="Estrategia Digital")
-    kpi2.metric(label="Crecimiento Ventas", value="18%", delta="Anual")
-    kpi3.metric(label="Rotación Stock", value="Alta", delta="Sell-out")
+    # KPIs
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Objetivo Leads", "450/mes", "Marketing Digital")
+    c2.metric("Crecimiento", "+18%", "Interanual")
+    c3.metric("Posicionamiento", "Top 3", "Sector IA")
 
 
-# ==========================================
-# PÁGINA MODELO A (TITAN)
-# ==========================================
+# --- 7. PÁGINA MODELO A (TITAN) ---
 elif st.session_state.page == "Modelo A (Titan)":
-    # Títulos en Blanco, Negrita y Cursiva como solicitado
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"KRONOS TITAN"</p>', unsafe_allow_html=True)
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem; font-weight: bold; font-style: italic;">Potencia que define tu mundo</p>', unsafe_allow_html=True)
+    # Header Estilizado
+    st.markdown("""
+    <div style="background-color: #0A192F; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
+        <h1 style="color: white; font-size: 3.5rem; margin: 0;">KRONOS TITAN</h1>
+        <p style="color: #FFFFFF; font-size: 1.8rem; font-weight: bold; font-style: italic;">Potencia que define tu mundo</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Banner Heroico para el producto
     try:
-        st.image("image_pro.png", width=None, use_container_width=True) 
+        st.image("cartel.jpeg", use_container_width=True) 
     except:
         pass
 
-    c1, c2 = st.columns([1, 1])
+    c1, c2 = st.columns(2)
     with c1:
         st.markdown("""
-        <div class="pro-card" style="margin-top: 20px;">
-            <h3>Ficha Técnica Estratégica</h3>
+        <div class="pro-card">
+            <h3>🎯 Ficha Estratégica</h3>
             <ul>
-                <li><b>Target:</b> Profesionales 30-55 años (Ingenieros, Arquitectos).</li>
-                <li><b>Key Feature:</b> Aceleración por Hardware para IA.</li>
-                <li><b>Posicionamiento:</b> Premium / Alto Rendimiento.</li>
+                <li><b>Target:</b> Ingenieros, Arquitectos y Desarrolladores IA.</li>
+                <li><b>Hardware:</b> Núcleos dedicados para Inteligencia Artificial.</li>
                 <li><b>Mensaje:</b> "No aceptes límites".</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
-        
     with c2:
-        st.write("### ¿Por qué Titan?")
-        st.write("""
-        El **Modelo A** responde a la necesidad de *fiabilidad absoluta*. 
-        En un mercado saturado, Titan se diferencia no por precio, sino por **capacidad de cómputo**.
-        
-        > *"Es una inversión con la que buscan obtener una ventaja competitiva."* """)
-        st.progress(95, text="Potencia de Rendimiento")
-        st.progress(90, text="Fiabilidad")
-        st.progress(60, text="Portabilidad")
+        st.info("💎 **Posicionamiento:** Premium High-End.")
+        st.write("La inversión segura para obtener ventaja competitiva.")
+        st.progress(98, text="Rendimiento IA")
+        st.progress(95, text="Fiabilidad")
 
-# ==========================================
-# PÁGINA MODELO B (SPARK)
-# ==========================================
+
+# --- 8. PÁGINA MODELO B (SPARK) ---
 elif st.session_state.page == "Modelo B (Spark)":
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"KRONOS SPARK"</p>', unsafe_allow_html=True)
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem; font-weight: bold; font-style: italic;">Tu día a día, elevado</p>', unsafe_allow_html=True)
+    # Header Estilizado
+    st.markdown("""
+    <div style="background-color: #FF8C00; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
+        <h1 style="color: white; font-size: 3.5rem; margin: 0;">KRONOS SPARK</h1>
+        <p style="color: #FFFFFF; font-size: 1.8rem; font-weight: bold; font-style: italic;">Tu día a día, elevado</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     try:
-        st.image("image_lite.png", width=None, use_container_width=True) 
+        st.image("cartel.jpeg", use_container_width=True) 
     except:
         pass
-        
-    c1, c2 = st.columns([1, 1])
-    with c1:
-        st.write("### ¿Por qué Spark?")
-        st.write("""
-        El **Modelo B** ataca el segmento masivo (estudiantes y familias) que busca **calidad-precio** sin sacrificar estilo.
-        
-        * Diseño ligero para movilidad.
-        * Batería optimizada.
-        * Estética 'Fresh' (Naranja/Blanco).
-        """)
-        st.progress(70, text="Potencia de Rendimiento")
-        st.progress(85, text="Fiabilidad")
-        st.progress(100, text="Portabilidad")
 
-    with c2:
+    c1, c2 = st.columns(2)
+    with c1:
         st.markdown("""
-        <div class="lite-card" style="margin-top: 20px;">
-            <h3>Ficha Técnica Estratégica</h3>
+        <div class="lite-card">
+            <h3>🎒 Ficha Estratégica</h3>
             <ul>
-                <li><b>Target:</b> Gen Z, Estudiantes, Uso Doméstico.</li>
-                <li><b>Key Feature:</b> Versatilidad y Diseño.</li>
-                <li><b>Posicionamiento:</b> Accessible Premium.</li>
+                <li><b>Target:</b> Estudiantes y Emprendedores Digitales.</li>
+                <li><b>Ventaja:</b> Ligereza y batería optimizada.</li>
                 <li><b>Mensaje:</b> "Todo lo que necesitas, al instante".</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
+    with c2:
+        st.warning("⚡ **Posicionamiento:** Calidad-Precio Imbatible.")
+        st.write("Diseño 'Fresh' (Naranja/Blanco) para el público masivo.")
+        st.progress(85, text="Portabilidad")
+        st.progress(90, text="Autonomía")
 
-# ==========================================
-# PÁGINA CONTACTO
-# ==========================================
+
+# --- 9. PÁGINA CONTACTO ---
 elif st.session_state.page == "Contacto":
-    c_izq, c_der = st.columns(2)
+    c_izq, c_der = st.columns([1, 2])
     with c_izq:
-        st.header("Conecta con KRONOS")
-        st.write("Ayúdanos a alcanzar nuestra meta de **5,400 leads anuales**.")
+        st.header("Únete")
+        st.write("Impulsando la revolución tecnológica.")
         try:
-            st.image("logo.jpeg", width=300)
+            st.image("logo.jpeg", width=200)
         except:
             pass
     
     with c_der:
-        with st.form("lead_form"):
-            st.write("**Formulario de Captación (Simulación)**")
-            st.text_input("Nombre")
-            st.text_input("Email Corporativo")
-            st.selectbox("Sector:", ["Arquitectura/Ingeniería", "Educación", "Retail/Distribución", "Otro"])
-            
-            submitted = st.form_submit_button("SOLICITAR INFORMACIÓN")
-            if submitted:
-                st.success("Lead registrado correctamente en el CRM.")
+        with st.form("lead"):
+            st.write("📩 **Suscríbete a la Newsletter**")
+            st.text_input("Email")
+            st.text_input("Sector")
+            st.form_submit_button("ENVIAR")
+            st.success("Gracias por tu interés en Kronos Systems.")
