@@ -181,7 +181,7 @@ if st.session_state.page == "Inicio":
 # ==========================================
 elif st.session_state.page == "Modelo A (Titan)":
     st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"*KRONOS TITAN*"</p>', unsafe_allow_html=True)
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"### *Potencia que define tu mundo*"</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"### Potencia que define tu mundo"</p>', unsafe_allow_html=True)
     
     # Banner Heroico para el producto
     try:
@@ -220,7 +220,7 @@ elif st.session_state.page == "Modelo A (Titan)":
 # ==========================================
 elif st.session_state.page == "Modelo B (Spark)":
     st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 4rem;">"*KRONOS TITAN*"</p>', unsafe_allow_html=True)
-    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"### *Tu día a día, elevado*"</p>', unsafe_allow_html=True)
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2rem;">"### Tu día a día, elevado"</p>', unsafe_allow_html=True)
     
         # Banner Heroico para el producto
     try:
