@@ -119,10 +119,12 @@ if st.session_state.page == "Inicio":
     st.markdown('<p class="tagline">"Tu ambición, nuestro motor." [cite: 123]</p>', unsafe_allow_html=True)
 
     # 2. VIDEO HERO (Cinemático)
-    # El video ocupa todo el ancho para impactar
+    # Video centrado y con ancho fijo (no ocupa todo el ancho)
     try:
-        st.video("video_promo.mp4", autoplay=True, muted=True, loop=True)
-    except:
+        col_l, col_vid, col_r = st.columns([1, 2, 1])
+        with col_vid:
+            st.video("video_promo.mp4", width=640)  # ajustar ancho en píxeles según necesidad
+    except Exception:
         st.warning("⚠️ Archivo 'video_promo.mp4' no encontrado. Súbelo al repositorio.")
 
     st.markdown("###") # Espaciador
@@ -251,7 +253,7 @@ elif st.session_state.page == "Contacto":
     with c_izq:
         st.header("Conecta con KRONOS")
         st.write("Ayúdanos a alcanzar nuestra meta de **5,400 leads anuales**[cite: 54].")
-        st.image("logo.jpeg", width=200)
+        st.image("logo.jpeg", width=120)
     
     with c_der:
         with st.form("lead_form"):
