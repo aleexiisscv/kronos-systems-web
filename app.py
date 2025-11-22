@@ -110,12 +110,11 @@ if st.session_state.page == "Inicio":
     # 1. HEADER CON LOGO Y TAGLINE
     col_spacer1, col_logo, col_spacer2 = st.columns([1, 2, 1])
     with col_logo:
-        # Logo principal centrado (usando la imagen que subiste)
+        # Logo principal centrado con tamaño reducido
         try:
-            st.image("logo.jpeg", use_container_width=True) 
+            st.image("logo.jpeg", width=220)  # ajustar ancho en píxeles para hacerlo más pequeño
         except:
             st.markdown("<h1 style='text-align: center; color: #0A192F;'>KRONOS SYSTEMS</h1>", unsafe_allow_html=True)
-    
     st.markdown('<p class="tagline">"Tu ambición, nuestro motor." [cite: 123]</p>', unsafe_allow_html=True)
 
     # 2. VIDEO HERO (Cinemático)
@@ -181,7 +180,7 @@ elif st.session_state.page == "Modelo A (Titan)":
     
     # Banner Heroico para el producto
     try:
-        st.image("cartel.jpeg", width=None, use_container_width=True) # Reusamos el cartel o una imagen especifica
+        st.image("image_pro.png", width=None, use_container_width=True) # Reusamos el cartel o una imagen especifica
     except:
         pass
 
@@ -217,7 +216,11 @@ elif st.session_state.page == "Modelo A (Titan)":
 elif st.session_state.page == "Modelo B (Spark)":
     st.markdown("# KRONOS SPARK [cite: 137]")
     st.markdown("### *Tu día a día, elevado*")
-    
+        # Banner Heroico para el producto
+    try:
+        st.image("image_lite.png", width=None, use_container_width=True) # Reusamos el cartel o una imagen especifica
+    except:
+        pass
     c1, c2 = st.columns([1, 1])
     with c1:
         st.write("### ¿Por qué Spark?")
@@ -253,7 +256,7 @@ elif st.session_state.page == "Contacto":
     with c_izq:
         st.header("Conecta con KRONOS")
         st.write("Ayúdanos a alcanzar nuestra meta de **5,400 leads anuales**[cite: 54].")
-        st.image("logo.jpeg", width=120)
+        st.image("logo.jpeg", width=200)
     
     with c_der:
         with st.form("lead_form"):
