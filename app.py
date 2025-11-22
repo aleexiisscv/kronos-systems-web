@@ -119,7 +119,8 @@ if st.session_state.page == "Inicio":
             st.image("logo.jpeg", use_container_width=True) 
         except:
             st.markdown("<h1 style='text-align: center; color: #0A192F;'>KRONOS SYSTEMS</h1>", unsafe_allow_html=True)
-    st.markdown('<p class="tagline">"Tu ambición, nuestro motor." </p>', unsafe_allow_html=True)
+
+    st.markdown('<p class="tagline" style="color: #FFFFFF; font-size: 2.5rem;">"Tu ambición, nuestro motor."</p>', unsafe_allow_html=True)
 
     # 2. VIDEO HERO (Cinemático)
     # Video centrado y con ancho fijo (no ocupa todo el ancho)
