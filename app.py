@@ -1,5 +1,12 @@
 import streamlit as st
 
+# --- CONFIGURACIÓN DE ESTADO (Para que los botones funcionen) ---
+if 'page' not in st.session_state:
+    st.session_state.page = "Inicio"
+
+def navigate_to(page_name):
+    st.session_state.page = page_name
+
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="KRONOS SYSTEMS | Distribución Oficial",
@@ -7,115 +14,170 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- ESTILOS CSS PERSONALIZADOS (Basado en Identidad Visual [cite: 120, 121, 122]) ---
-# Azul Marino Profundo (Corporativo) y Naranja Eléctrico (Modelo B)
+# --- ESTILOS CSS PERSONALIZADOS (MEJORADO PARA LEGIBILIDAD) ---
 st.markdown("""
     <style>
-    .main-header {font-size: 3rem; color: #0A192F; text-align: center; font-weight: bold;}
-    .sub-header {font-size: 1.5rem; color: #555; text-align: center;}
-    .pro-card {background-color: #0A192F; color: #E0E0E0; padding: 20px; border-radius: 10px; border: 1px solid #C0C0C0;}
-    .lite-card {background-color: #FFFFFF; color: #333; padding: 20px; border-radius: 10px; border: 1px solid #FF8C00;}
-    .highlight {color: #FF4500; font-weight: bold;}
+    /* Títulos principales */
+    .main-header {
+        font-family: 'Helvetica Neue', sans-serif;
+        font-size: 3.5rem; 
+        color: #0A192F; 
+        text-align: center; 
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+    .sub-header {
+        font-size: 1.2rem; 
+        color: #555; 
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    /* MUNDO PRO (Modelo A) - Fondo Azul Marino, Texto Plata/Blanco */
+    .pro-card {
+        background-color: #0A192F; 
+        color: #F0F0F0; /* Texto Plata Claro para contraste */
+        padding: 30px; 
+        border-radius: 15px; 
+        border-left: 5px solid #C0C0C0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .pro-card h2 { color: #FFFFFF !important; }
+    .pro-card h3 { color: #C0C0C0 !important; }
+    .pro-card p { color: #E0E0E0 !important; font-size: 1.1rem;}
+
+    /* MUNDO LITE (Modelo B) - Fondo Blanco, Texto Oscuro/Naranja */
+    .lite-card {
+        background-color: #FFFFFF; 
+        color: #333333; 
+        padding: 30px; 
+        border-radius: 15px; 
+        border-right: 5px solid #FF8C00;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .lite-card h2 { color: #FF8C00 !important; }
+    
+    /* Ajuste de botones nativos de Streamlit */
+    div.stButton > button {
+        width: 100%;
+        border-radius: 5px;
+        font-weight: bold;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # --- BARRA LATERAL DE NAVEGACIÓN ---
-st.sidebar.title("Navegación")
-page = st.sidebar.radio("Ir a:", ["Inicio", "Modelo A (Titan)", "Modelo B (Spark)", "Contacto"])
+st.sidebar.title("Navegación KRONOS")
+# El widget radio ahora escucha y actualiza el session_state
+st.sidebar.radio(
+    "Ir a:", 
+    ["Inicio", "Modelo A (Titan)", "Modelo B (Spark)", "Contacto"],
+    key="page" # Vincula el widget a la variable de estado
+)
 
-# --- PÁGINA DE INICIO: CONCEPTO DOBLE REALIDAD [cite: 126] ---
-if page == "Inicio":
+# --- LÓGICA DE PÁGINAS ---
+
+# 1. PÁGINA DE INICIO
+if st.session_state.page == "Inicio":
     st.markdown('<p class="main-header">KRONOS SYSTEMS</p>', unsafe_allow_html=True)
-    st.markdown(f'<p class="sub-header"><i>"Tu ambición, nuestro motor."</i> [cite: 123]</p>', unsafe_allow_html=True)
+    st.markdown(f'<p class="sub-header"><i>"Tu ambición, nuestro motor."</i> [cite: 124]</p>', unsafe_allow_html=True)
     
     st.divider()
     
-    # Layout de dos columnas para simular el cartel publicitario [cite: 127]
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="large")
     
     with col1:
-        # Lado Izquierdo: Mundo PRO/IA [cite: 128]
+        # Lado Izquierdo: Mundo PRO [cite: 129]
         st.markdown("""
         <div class="pro-card">
-            <h2 style='text-align: center; color: #C0C0C0;'>MUNDO PRO / IA</h2>
+            <h2 style='text-align: center;'>MUNDO PRO / IA</h2>
             <h3 style='text-align: center;'>KRONOS TITAN</h3>
-            <p style='text-align: center;'><i>"Diseñado para lo imposible"</i></p>
-            <p>Para ingenieros, arquitectos y creadores que dominan la IA.</p>
+            <hr style='border-color: #555;'>
+            <p style='text-align: center; font-style: italic;'>"Diseñado para lo imposible"</p>
+            <p style='text-align: center;'>Arquitectura optimizada para Inteligencia Artificial.</p>
             <br>
         </div>
         """, unsafe_allow_html=True)
-        st.button("Explorar Modelo A ➜", key="btn_a")
+        # El botón llama a la función para cambiar el estado
+        st.button("Explorar Modelo A ➜", on_click=navigate_to, args=("Modelo A (Titan)",))
 
     with col2:
-        # Lado Derecho: Mundo LITE [cite: 134]
+        # Lado Derecho: Mundo LITE [cite: 135]
         st.markdown("""
         <div class="lite-card">
-            <h2 style='text-align: center; color: #FF8C00;'>MUNDO LITE</h2>
+            <h2 style='text-align: center;'>MUNDO LITE</h2>
             <h3 style='text-align: center;'>KRONOS SPARK</h3>
-            <p style='text-align: center;'><i>"Todo lo que necesitas, al instante"</i></p>
-            <p>Para estudiantes y emprendedores. Versatilidad inteligente.</p>
+            <hr style='border-color: #FF8C00;'>
+            <p style='text-align: center; font-style: italic;'>"Todo lo que necesitas, al instante"</p>
+            <p style='text-align: center;'>Versatilidad inteligente y diseño premium.</p>
             <br>
         </div>
         """, unsafe_allow_html=True)
-        st.button("Explorar Modelo B ➜", key="btn_b")
+        st.button("Explorar Modelo B ➜", on_click=navigate_to, args=("Modelo B (Spark)",))
 
-    st.info("📢 Simulación académica para la asignatura de Administración de Empresas. [cite: 3]")
+    st.info("💡 Proyecto académico: Plan de Comunicación Integral. [cite: 3]")
 
-# --- PÁGINA MODELO A (PREMIUM) [cite: 128] ---
-elif page == "Modelo A (Titan)":
-    st.markdown("# KRONOS TITAN: Dominio de la IA")
-    st.markdown("### *Arquitectura optimizada para Inteligencia Artificial* [cite: 132]")
+# 2. PÁGINA MODELO A
+elif st.session_state.page == "Modelo A (Titan)":
+    st.markdown("# KRONOS TITAN")
+    st.markdown("### *La herramienta definitiva para la era de la IA*")
     
-    c1, c2 = st.columns([1, 2])
+    c1, c2 = st.columns([1, 1])
     with c1:
-        # Aquí iría una imagen generada o placeholder
-        st.image("https://placehold.co/400x400/0A192F/C0C0C0?text=KRONOS+TITAN", caption="Estética Premium Dark")
+        # Placeholder más profesional
+        st.image("image_pro.png", 
+                 caption="Entorno de alto rendimiento y renderizado 3D")
     with c2:
-        st.write("""
-        **Perfil del Usuario:** Ingenieros, Arquitectos (30-55 años)[cite: 59].
-        
-        **Propuesta de Valor:**
-        * 🚀 **Rendimiento Extremo:** Potencia de cálculo para algoritmos de IA y renderizado 3D[cite: 62].
-        * 🛡️ **Fiabilidad Total:** Inversión segura, sin fallos críticos[cite: 63].
-        * 💎 **Estatus:** Tecnología punta que te da ventaja competitiva.
-        """)
-        st.success("Precio justificado por la integración profunda de IA y materiales premium. [cite: 40]")
+        st.markdown("""
+        <div class="pro-card">
+            <h3>Especificaciones Estratégicas</h3>
+            <ul>
+                <li><b>Target:</b> Ingenieros, Arquitectos y Data Scientists[cite: 60].</li>
+                <li><b>Ventaja:</b> Potencia de cálculo superior para algoritmos de IA[cite: 107].</li>
+                <li><b>Promesa:</b> Fiabilidad total. Cero interrupciones.</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        st.warning("💰 **Posicionamiento:** Solución Premium de alta inversión.")
 
-# --- PÁGINA MODELO B (LITE) [cite: 134] ---
-elif page == "Modelo B (Spark)":
-    st.markdown("# KRONOS SPARK: Versatilidad Pura")
-    st.markdown("### *Todo lo que necesitas, al instante* [cite: 137]")
+# 3. PÁGINA MODELO B
+elif st.session_state.page == "Modelo B (Spark)":
+    st.markdown("# KRONOS SPARK")
+    st.markdown("### *Tu compañero diario: ligero, rápido y capaz*")
     
-    c1, c2 = st.columns([2, 1])
+    c1, c2 = st.columns([1, 1])
     with c1:
-        st.write("""
-        **Perfil del Usuario:** Estudiantes, Familias, Público General[cite: 68].
-        
-        **Propuesta de Valor:**
-        * ⚡ **Agilidad:** Perfecto para el día a día, estudio y entretenimiento[cite: 71].
-        * 💰 **Relación Calidad-Precio:** Prestaciones superiores a la media de su gama[cite: 41].
-        * 🎨 **Diseño Fresco:** Estilizado y ligero, listo para moverte[cite: 136].
-        """)
-        st.warning("La mejor opción para quien busca eficiencia sin costes innecesarios.")
+        st.markdown("""
+        <div class="lite-card">
+            <h3>Versatilidad Cotidiana</h3>
+            <ul>
+                <li><b>Target:</b> Estudiantes y emprendedores digitales[cite: 69].</li>
+                <li><b>Ventaja:</b> Optimización y batería para todo el día[cite: 108].</li>
+                <li><b>Promesa:</b> La mejor relación calidad-precio del mercado.</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        st.success("✅ **Posicionamiento:** Compra inteligente y accesible.")
     with c2:
-        # Placeholder visual con colores naranja/blanco
-        st.image("https://placehold.co/400x400/FFFFFF/FF8C00?text=KRONOS+SPARK", caption="Estética Fresh Lite")
+         st.image("image_lite.png", 
+                 caption="Diseño ligero para movilidad total")
 
-# --- PÁGINA DE CONTACTO / OBJETIVOS ---
-elif page == "Contacto":
-    st.header("Únete a la Revolución KRONOS")
-    st.write("Nuestro objetivo es alcanzar **450 leads cualificados al mes**[cite: 53].")
+# 4. PÁGINA CONTACTO
+elif st.session_state.page == "Contacto":
+    st.header("Siguiente paso: La Conexión")
+    st.write("Impulsando el objetivo de **450 leads/mes** a través de ferias y medios digitales[cite: 54].")
     
     with st.form("lead_form"):
-        st.write("Suscríbete para recibir novedades:")
         col_a, col_b = st.columns(2)
         with col_a:
-            st.text_input("Nombre")
+            st.text_input("Nombre Completo")
+            st.text_input("Empresa / Universidad")
         with col_b:
-            st.selectbox("Me interesa:", ["Modelo A (Profesional)", "Modelo B (Estudiante)"])
-        st.text_input("Email")
+            st.selectbox("Interés Principal:", ["Alto Rendimiento (IA)", "Uso General / Estudiante", "Distribución"])
+            st.text_input("Correo Electrónico")
         
-        submitted = st.form_submit_button("Enviar Solicitud")
+        st.markdown("**Privacidad:** Tus datos impulsan nuestra innovación.")
+        submitted = st.form_submit_button("UNIRSE A KRONOS")
         if submitted:
             st.balloons()
-            st.success("¡Gracias! Tu ambición es nuestro motor. [cite: 123]")
+            st.success("¡Registro completado! Bienvenido al futuro. [cite: 50]")
